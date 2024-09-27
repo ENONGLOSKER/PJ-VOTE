@@ -1,0 +1,241 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'img/icon.png' %}">
+    <title>Add Vote Option</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    
+    <style>
+      :root{
+        --satu:#3B46F1;
+        --dua:#4F58F2;
+        --tiga:#DBD2FA;
+        --empat:#DBD2FA;
+        --lima:#7FFA8A;
+      }
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        body{
+          background-color: rgb(1, 17, 36);
+        }
+        .container{
+            max-width: 500px;
+            height: 100vh;
+            margin:  auto;
+            padding: 0 20px;
+            
+        }
+        .top{
+          padding: 20px 0;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .top #icon{
+          width: 25px;
+          height: 25px;
+          color: var(--satu);
+        }
+        .top a{
+          background-color: rgba(255, 255, 255, 0.081);
+          width: 45px;
+          height: 45px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 12px;
+        }
+        .top a:hover{
+          background-color: var(--dua);
+          color: var(--lima);
+        }
+        .top {
+          font-weight: 600;
+          color: var(--tiga);
+        }
+        .vote{
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 20px;
+        }
+        .card{
+          background-color: var(--satu);
+          height: 45%;
+          padding: 20px;
+          border-radius: 22px;
+        }
+
+        .item-top .top-user{
+          /* background-color: #DBD2FA; */
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .item-top .top-user #icon{
+          width: 25px;
+          height: 25px;
+          color: var(--tiga);
+        }
+        .item-top .top-user #icon:hover{
+          color: hotpink;
+        }
+        .item-top .top-user .user{
+          background-color: var(--lima);
+          padding: 6px 8px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 8px;
+          border-radius: 50px;
+        }
+        .item-top .top-user .user:hover{
+          box-shadow: 4px 2px 50px var(--lima);
+        }
+        .item-top .top-user .user img{
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          border: 1px solid var(--empat);
+        }
+
+        .item-bottom{
+          text-align: center;
+        }
+
+        .bottom-user{
+          margin: 20px 0;
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          text-align: left;
+        }
+        .bottom-user h3{
+          font-size: 26px;
+          color: var(--empat);
+        }
+        .bottom-user span{
+          color: #828283;
+        }
+        .btn-tap{
+          background-color: var(--dua);
+          width: 100%;
+          text-align: center;
+          display: block;
+          padding: 12px;
+          text-decoration: none;
+          color: var(--empat);
+          font-weight: 600;
+          border-radius: 50px;
+          box-shadow: 2px 2px 30px #3340f9;
+        }
+        .btn-tap:hover{
+          background-color: var(--lima);
+          color: var(--satu);
+          box-shadow: 2px 2px 30px var(--lima);
+        }
+
+
+        /* form */
+        /* form{
+          background-color: #ffffff33;
+          width: 100%;
+          color: white;
+          padding: 50px 20px;
+          border-radius: 22px;
+        } */
+        .styled-form {
+            background-color: #ffffff33;
+            padding: 20px;
+            margin: 14px 0;
+            border-radius: 12px;
+            width: 100%;
+        }
+
+        .styled-form p {
+            margin: 0 0 8px;
+        }
+
+        .styled-form label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+      .styled-form input[type="text"],
+      .styled-form input[type="text"],
+      .styled-form input[type="text"],
+      .styled-form select,
+      .styled-form textarea {
+          width: 100%;
+          padding: 10px;
+          border: none;
+          border-radius: 4px;
+          box-sizing: border-box;
+          margin-bottom: 10px;
+          font-size: 16px;
+      }
+      .styled-form textarea {
+          height: 100px;
+      }
+
+      .styled-form button.btn {
+        display: inline-block;
+        width: 100%;
+        background: var(--satu);
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+        border: none;
+        padding: 12px 20px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+
+      .styled-form button.btn:hover {
+            background: var(--lima);
+            color: var(--satu);
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+      <div class="top">
+        <a href="{% url 'vote_list' %}"><ion-icon name="chevron-back-outline" id="icon"></ion-icon></a>
+        <p>Add Vote Option</p>
+        <a href="{% url 'create_vote' %}"><ion-icon name="add-circle" id="icon"></ion-icon></a>
+      </div>
+
+        <div class="vote">
+
+          <form method="post" class="styled-form">
+            {% csrf_token %}
+            {{ option_form.as_p }}
+            <button type="submit" class="btn">Add Option</button>
+          </form>
+          {% if options >= 2 %}
+          <a href="{% url 'vote_list' %}" class="link" style="background-color: #7FFA8A; padding: 12px 22px; border-radius: 12px; text-decoration: none; font-weight: 500;">
+            <ion-icon name="checkmark-circle" style="width: 20px; height: 20px; transform: translateY(5px);"></ion-icon> Selesai 
+          </a>
+          {% endif %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

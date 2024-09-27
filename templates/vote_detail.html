@@ -1,0 +1,241 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'img/icon.png' %}">
+    <title>Choose Vote</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+    
+    <style>
+      :root{
+        --satu:#3B46F1;
+        --dua:#4F58F2;
+        --tiga:#DBD2FA;
+        --empat:#DBD2FA;
+        --lima:#7FFA8A;
+      }
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        body{
+          background-color: rgb(1, 17, 36);
+        }
+        .container{
+            max-width: 500px;
+            height: 100vh;
+            margin:  auto;
+            padding: 0 20px;
+            
+        }
+        .top{
+          padding: 20px 0;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .top #icon{
+          width: 25px;
+          height: 25px;
+          color: var(--satu);
+        }
+        .top a{
+          background-color: rgba(255, 255, 255, 0.081);
+          width: 45px;
+          height: 45px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 12px;
+        }
+        .top a:hover{
+          background-color: var(--dua);
+          color: var(--lima);
+        }
+        .top {
+          font-weight: 600;
+          color: var(--tiga);
+        }
+        .vote{
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 20px;
+          margin: 5px auto;
+        }
+        .card{
+          background-color: rgba(255, 255, 255, 0.137);
+          height: 45%;
+          padding: 20px;
+          border-radius: 22px;
+          text-align: center;
+          margin-bottom: 20px;
+        }        
+        .bottom-user h3{
+          font-size: 26px;
+          color: var(--empat);
+        }
+        .btn-tap{
+          background-color: var(--dua);
+          width: 100%;
+          text-align: center;
+          padding: 15px 0;
+          text-decoration: none;
+          color: var(--empat);
+          font-weight: 600;
+          font-size: 20px;
+          border-radius: 50px;
+          border: none;
+          box-shadow: 2px 2px 30px #3340f9;
+          margin-top: 25px;
+        }
+        .btn-tap:hover{
+          background-color: var(--lima);
+          color: var(--satu);
+          box-shadow: 2px 2px 30px var(--lima);
+        }
+        progress {
+          width: 100%;
+          height: 20px;
+          -webkit-appearance: none;
+          appearance: none;
+        }
+        progress::-webkit-progress-bar {
+          background-color: rgba(255, 255, 255, 0.081);
+          border-radius: 50px;
+        }
+        progress::-webkit-progress-value {
+          background-color: var(--lima);
+          border-radius: 50px;
+        }
+        progress::-moz-progress-bar {
+          background-color: var(--dua);
+          border-radius: 50px;
+        }
+
+        /* .histori{
+          background-color: #3340f9;
+        } */
+        .histori-card{
+          background-color: #ffffff33;
+          border-radius: 22px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 12px;
+          margin-bottom: 20px;
+        }
+        .histori-card:hover{
+          background-color: var(--dua);
+          box-shadow: 2px 2px 20px var(--satu);
+        }
+        .histori-card .title-vote{
+          text-align: center;
+          color: #7FFA8A;
+        }
+        .histori-card .title-vote span{
+          font-size: 12px;
+        }
+        .histori-card .title-vote h4{
+          background-color: var(--satu);
+          padding: 5px 10px;
+          border-radius: 50px;
+          font-size: 15px;
+          font-weight: 500;
+        }
+        .histori-card .img{
+          display: flex;
+          gap: 10px;
+          justify-content: center;
+          align-items: center;
+        }
+        .histori-card .img img{
+          width: 70px;
+          height: 70px;
+          border-radius: 12px;
+        }
+        .histori-card .img .img-title span{
+          font-size: 12px;
+          color: #7FFA8A;
+        }
+        .histori-card .img .img-title h3{
+          font-size: 25px;
+          color: #DBD2FA;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+      <div class="top">
+        <a href="{% url 'vote_list' %}"><ion-icon name="chevron-back-outline" id="icon"></ion-icon></a>
+        <p>Choose Vote</p>
+        <a href="{% url 'create_vote' %}"><ion-icon name="add-circle"id="icon"></ion-icon></a>
+      </div>
+
+        <div class="vote">
+          <div class="card">
+            <div class="item-bottom">
+              <div class="bottom-user" style="text-align: center;">
+                <h3>{{ vote.description }}</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for option in vote.options.all %}
+                    <div style="text-align: left; color: #7FFA8A; margin-top: 20px; ">
+                        <div class="pilih" style="display: flex; align-items: center; gap: 10px;">
+                            <input type="radio" name="option" value="{{ option.id }}" style="width: 20px; height: 20px;">
+                            {{ option.option_text }} - {{ option.votes }} votes
+                        </div>
+                        <div class="progres" style="display: flex; align-items: center; gap: 10px;">
+                            <progress value="{% widthratio option.votes total_votes 100 %}" max="100" style="margin: 10px 0;"></progress>
+                            <span style="color: white;">
+                                {% if total_votes %}
+                                    {% widthratio option.votes total_votes 100 %}%
+                                {% endif %}
+                            </span>
+                        </div>
+                        
+                    </div>
+                    {% endfor %}
+                    <button type="submit" class="btn-tap">Vote</button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <span style="color: #7FFA8A; background-color: #ffffff27; font-weight: 600; padding: 12px 22px; border-radius: 50px; margin-bottom: 20px;">History</span>
+        </div>
+
+          <div class="histori">
+            {% for record in history %}
+            <div class="histori-card">
+
+              <div class="img">
+                <img src="{% static 'img/av1.jpg' %}" alt="">
+                <div class="img-title">
+                  <span>{{ record.timestamp }}</span>
+                  <h3 style="text-transform: capitalize;">{{ record.user.username }}</h3>
+                </div>
+              </div>
+
+              <div class="title-vote">
+                <span>Voted</span>
+                <h4>{{ record.option.option_text }}</h4>
+              </div>
+
+            </div>
+            {% endfor %}
+          </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
