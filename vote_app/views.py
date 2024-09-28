@@ -4,6 +4,9 @@ from django.http import HttpResponseForbidden
 from .models import Vote, Option, VoteHistory
 from .forms import VoteForm, OptionForm, VoteAccessForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt 
 @login_required
 def create_vote(request):
     if request.method == 'POST':
@@ -14,6 +17,8 @@ def create_vote(request):
     else:
         vote_form = VoteForm()
     return render(request, 'form_vote.html', {'vote_form': vote_form})
+
+@csrf_exempt
 @login_required
 def add_options(request, vote_id):
     vote = get_object_or_404(Vote, id=vote_id)
@@ -29,6 +34,7 @@ def add_options(request, vote_id):
         option_form = OptionForm()
     return render(request, 'form_option.html', {'vote': vote, 'option_form': option_form, 'options': options})
 
+@csrf_exempt
 def access_vote(request, vote_id):
     vote = get_object_or_404(Vote, id=vote_id)
     if request.method == 'POST':
@@ -44,6 +50,7 @@ def access_vote(request, vote_id):
         form = VoteAccessForm()
     return render(request, 'access_vote.html', {'form': form, 'vote': vote})
 
+@csrf_exempt
 def vote_detail(request, vote_id):
     vote = get_object_or_404(Vote, id=vote_id)
     history = VoteHistory.objects.filter(vote=vote)
@@ -85,7 +92,7 @@ def vote_detail(request, vote_id):
         return redirect('vote_detail', vote_id=vote.id)
 
     return render(request, 'vote_detail.html', {'vote': vote, 'total_votes': total_votes, 'history': history})
-
+@csrf_exempt
 def vote_list(request):
     votes = Vote.objects.all().order_by('-id')
     return render(request, 'vote_list.html', {'votes': votes})
