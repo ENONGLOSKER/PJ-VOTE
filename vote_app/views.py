@@ -6,8 +6,8 @@ from .forms import VoteForm, OptionForm, VoteAccessForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
-@csrf_exempt 
 @login_required
+@csrf_exempt 
 def create_vote(request):
     if request.method == 'POST':
         vote_form = VoteForm(request.POST)
@@ -18,8 +18,8 @@ def create_vote(request):
         vote_form = VoteForm()
     return render(request, 'form_vote.html', {'vote_form': vote_form})
 
-@csrf_exempt
 @login_required
+@csrf_exempt
 def add_options(request, vote_id):
     vote = get_object_or_404(Vote, id=vote_id)
     options = vote.options.count()
