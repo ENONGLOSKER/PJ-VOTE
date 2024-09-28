@@ -53,9 +53,14 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'vote_project.urls'
-
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = [
+    'https://pj-vote-production.up.railway.app/',
+    'http://localhost:8000',
+] 
 CSRF_TRUSTED_ORIGINS = [
     'https://pj-vote-production.up.railway.app/',
+    'http://localhost:8000',
 ]
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
