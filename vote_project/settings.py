@@ -54,6 +54,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'vote_project.urls'
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://pj-vote-production.up.railway.app/',
+]
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
