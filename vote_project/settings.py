@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-74zrakil+tlx*5^q%%s5fv(tfb$y92l3p)_jv4ls0gup*-!d@*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.0', 'pj-vote-production.up.railway.app']
+
 
 
 # Application definition
@@ -38,12 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'vote_app',
     'corsheaders',
+    'vote_app',
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -54,18 +55,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'vote_project.urls'
 CORS_ALLOW_ALL_ORIGINS = False
+CSRF_TRUSTED_ORIGINS = ['https://pj-vote-production.up.railway.app']
 CORS_ALLOWED_ORIGINS = [
-    'https://pj-vote-production.up.railway.app/',
-    'http://localhost:8000',
-] 
-CSRF_TRUSTED_ORIGINS = [
-    'https://pj-vote-production.up.railway.app/',
-    'http://localhost:8000',
+    "https://pj-vote-production.up.railway.app",
 ]
+CORS_ALLOW_CREDENTIALS = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
+
+
+ROOT_URLCONF = 'vote_project.urls'
 
 
 TEMPLATES = [
@@ -145,6 +145,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # login redirect
-LOGIN_URL = '/admin'  # Assuming your login URL name is 'login'
+# LOGIN_URL = '/admin'  # Assuming your login URL name is 'login'
 # LOGIN_REDIRECT_URL = '/vote_list'  # Redirect to vote list after successful login
 # LOGOUT_REDIRECT_URL = '/'  # Redirect to login page after logout
