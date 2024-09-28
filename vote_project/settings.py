@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-74zrakil+tlx*5^q%%s5fv(tfb$y92l3p)_jv4ls0gup*-!d@*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -57,6 +57,8 @@ ROOT_URLCONF = 'vote_project.urls'
 CSRF_TRUSTED_ORIGINS = [
     'https://pj-vote-production.up.railway.app/',
 ]
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 
 TEMPLATES = [
