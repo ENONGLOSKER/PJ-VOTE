@@ -7,12 +7,17 @@ class Vote(models.Model):
     description = models.TextField()
     key = models.CharField(max_length=100, unique=True)
     created = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(User, related_name='liked_votes', blank=True, default=0)
 
     def __str__(self):
         return self.title
 
     def total_votes(self):
         return sum(option.votes for option in self.options.all())
+
+    def total_likes(self):
+        return self.likes.count()
+
 
 class Option(models.Model):
     vote = models.ForeignKey(Vote, on_delete=models.CASCADE, related_name='options')

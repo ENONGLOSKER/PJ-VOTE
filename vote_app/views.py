@@ -6,6 +6,21 @@ from .forms import VoteForm, OptionForm, VoteAccessForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
+
+@login_required
+@csrf_exempt
+def like_vote(request, vote_id):
+    vote = get_object_or_404(Vote, id=vote_id)
+    
+    if vote.likes.filter(id=request.user.id).exists():
+        # Jika user sudah like, maka hapus like (unlike)
+        vote.likes.remove(request.user)
+    else:
+        # Jika user belum like, tambahkan like
+        vote.likes.add(request.user)
+
+    return redirect('vote_list')
+
 @login_required
 @csrf_exempt 
 def create_vote(request):

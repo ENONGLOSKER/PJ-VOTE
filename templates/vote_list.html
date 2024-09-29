@@ -156,36 +156,47 @@
         <a href="{% url 'create_vote' %}"><ion-icon name="add-circle" id="icon"></ion-icon></a>
       </div>
 
-        <div class="vote">
-            {% if votes %}
-                {% for vote in votes %}
-                    <div class="card">
-                        <div class="item-top">
-                            <div class="top-user">
-                                <div class="user">
-                                    <img src="{% static 'img/av1.jpg' %}" alt="">
-                                    <span style="margin-right: 5px;">Elqusairi</span>
-                                </div>
-                                <a href=""><ion-icon name="heart" id="icon"></ion-icon></a>
+      <div class="vote">
+        {% if votes %}
+            {% for vote in votes %}
+                <div class="card">
+                    <div class="item-top">
+                        <div class="top-user">
+                            <div class="user">
+                                <img src="{% static 'img/icon.png' %}" alt="">
+                                <span style="margin-right: 5px; font-weight: 500;">Your Vote</span>
                             </div>
-                        </div>
-            
-                        <div class="item-bottom">
-                            <div class="bottom-user">
-                                <h3 style="text-transform: capitalize;">{{ vote.title }}</h3>
-                                <span>{{ vote.created }}</span>
+                            <!-- Like -->
+                            <div class="" style="display: flex; flex-direction: row; justify-content: end; gap: 4px;">
+                              <a href="{% url 'like_vote' vote.id %}">
+                                {% if request.user in vote.likes.all %}
+                                    <ion-icon name="heart" id="icon" style="color: red;"></ion-icon>
+                                {% else %}
+                                    <ion-icon name="heart-outline" id="icon"></ion-icon>
+                                {% endif %}
+                            </a> 
+                            <span style="color: white;">{{ vote.total_likes }} likes</span>
                             </div>
-                            <a href="{% url 'access_vote' vote.id %}" class="btn-tap">Tap to see</a>
                         </div>
                     </div>
-                {% endfor %}
-            {% else %}
+            
+                    <div class="item-bottom">
+                        <div class="bottom-user">
+                            <h3 style="text-transform: capitalize;">{{ vote.title }}</h3>
+                            <span>{{ vote.created }}</span>
+                        </div>
+                        <a href="{% url 'access_vote' vote.id %}" class="btn-tap">Tap to see</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
             <div style="margin: 50px auto; background-color: #4f57f24b; padding: 20px; border-radius: 22px; text-align: center;">
                 <span style="font-size: 100px;">😥</span>
                 <p style="font-size: 20px; color: white;">Data vote belum ada!</p>
             </div>
-            {% endif %}
-        </div>
+        {% endif %}
+      </div>
+    
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
