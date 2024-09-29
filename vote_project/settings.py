@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-74zrakil+tlx*5^q%%s5fv(tfb$y92l3p)_jv4ls0gup*-!d@*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.0', 'pj-vote-production.up.railway.app']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'pj-vote-production.up.railway.app']
 
 
 

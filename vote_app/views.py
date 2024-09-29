@@ -97,6 +97,9 @@ def vote_list(request):
     votes = Vote.objects.all().order_by('-id')
     return render(request, 'vote_list.html', {'votes': votes})
 
+def get_started(request):
+    return render(request, 'get_started.html')
+
 # @login_required
 # def vote_history(request, vote_id):
 #     vote = get_object_or_404(Vote, id=vote_id)

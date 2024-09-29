@@ -27,7 +27,8 @@ urlpatterns = [
     path('add_options/<int:vote_id>/', views.add_options, name='add_options'),
     path('access/<int:vote_id>/', views.access_vote, name='access_vote'),
     path('vote/<int:vote_id>/', views.vote_detail, name='vote_detail'),
-    path('', views.vote_list, name='vote_list'),
+    path('/vote', views.vote_list, name='vote_list'),
+    path('', views.get_started, name='get_started'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
