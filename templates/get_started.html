@@ -10,28 +10,74 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    keyframes: {
+                        tada: {
+                            '0%': { transform: 'scale(1)' },
+                            '10%, 20%': { transform: 'scale(0.9) rotate(-3deg)' },
+                            '30%, 50%, 70%, 90%': { transform: 'scale(1.1) rotate(3deg)' },
+                            '40%, 60%, 80%': { transform: 'scale(1.1) rotate(-3deg)' },
+                            '100%': { transform: 'scale(1) rotate(0)' },
+                        },
+                        colorChange: {
+                            '0%': {
+                                color: '#2249c5', // Warna awal
+                                'text-shadow': '2px 2px 40px #000000', // Shadow awal
+                            },
+                            '25%': {
+                                color: '#19FDFD', // Warna 1
+                                'text-shadow': '3px 3px 50px #19FDFD', // Shadow 1
+                            },
+                            '50%': {
+                                color: '#01CE16', // Warna 2
+                                'text-shadow': '4px 4px 60px #01CE16', // Shadow 2
+                            },
+                            '75%': {
+                                color: '#CE8801', // Warna 3
+                                'text-shadow': '5px 5px 70px #CE8801', // Shadow 3
+                            },
+                            '100%': {
+                                color: '#CE01AD', // Kembali ke warna awal
+                                'text-shadow': '2px 2px 40px #CE01AD', // Kembali ke shadow awal
+                            },
+                        },
+                    },
+                    animation: {
+                        tada: 'tada 1s ease-in-out infinite',
+                        colorChange: 'colorChange 15s infinite', // Animasi dengan durasi 5 detik, loop terus-menerus
+                    },
+                }
+            }
+        }
+    </script>
 </head>
 <body class="bg-black ">
     <!-- Splash Screen -->
     <div class="splash-screen fixed inset-0 bg-black flex flex-col justify-center items-center z-50">
-        <img src="{% static 'img/icon.png' %}" alt="Logo" class="w-44 animate-bounce">
-        <h2 class="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#2249c5] via-[#4a68de] to-[#dcedfc] mt-5 animate-pulse">Your Vote</h2>
+        <img src="{% static 'img/icon.png' %}" alt="Logo" class="w-28 animate-tada">
+        <h2
+            class="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#2249c5] via-[#4a68de] to-[#dcedfc] mt-5 animate-pulse">
+            Your Vote</h2>
     </div>
 
     <!-- Konten Utama -->
     <div class="main-content hidden opacity-0 transition-opacity duration-500">
         <div class="container mx-auto px-5 text-white">
             <h1 class="text-6xl font-bold leading-tight mt-5 bg-clip-text text-transparent bg-gradient-to-br from-[#2249c5] via-[#4a68de] to-[#dcedfc]">
-                Your Vote Changes Everything!
+                Your Vote <span class="animate-colorChange">Changes</span> Everything!
             </h1>
 
-            <div class="flex flex-col items-center my-16 gap-y-1">
-                <img src="{% static 'img/icon.png' %}" alt="" class="w-44 animate-pulse">
+            <div class="flex flex-col items-center my-20 gap-y-1">
+                <img src="{% static 'img/icon.png' %}" alt="" class="w-28 animate-tada">
                 <h2 class="font-semibold text-4xl mt-5">Your Vote</h2>
             </div>
 
             <div class="flex flex-col items-center">
-                <a href="{% url 'vote_list'%}" class="text-center bg-[#3b82f680] py-4 w-full rounded-3xl border-4 border-[#2249c5] font-semibold text-2xl shadow-lg shadow-indigo-500/20">
+                <a href="{% url 'vote_list'%}"
+                    class="text-center bg-[#3b82f680] py-3 w-full rounded-full border-4 border-[#2249c5] font-semibold text-xl shadow-xl shadow-indigo-500/20 animate-pulse">
                     Get Started
                 </a>
             </div>

@@ -145,6 +145,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # login redirect
-# LOGIN_URL = '/admin'  # Assuming your login URL name is 'login'
-# LOGIN_REDIRECT_URL = '/vote_list'  # Redirect to vote list after successful login
-# LOGOUT_REDIRECT_URL = '/'  # Redirect to login page after logout
+LOGIN_URL = '/admin'  # Assuming your login URL name is 'login'
+LOGIN_REDIRECT_URL = '/vote_list'  # Redirect to vote list after successful login
+LOGOUT_REDIRECT_URL = '/vote_list'  # Redirect to login page after logout

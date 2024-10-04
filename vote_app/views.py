@@ -48,7 +48,7 @@ def add_options(request, vote_id):
     else:
         option_form = OptionForm()
     return render(request, 'form_option.html', {'vote': vote, 'option_form': option_form, 'options': options})
-
+@login_required
 @csrf_exempt
 def access_vote(request, vote_id):
     vote = get_object_or_404(Vote, id=vote_id)
@@ -64,7 +64,7 @@ def access_vote(request, vote_id):
     else:
         form = VoteAccessForm()
     return render(request, 'access_vote.html', {'form': form, 'vote': vote})
-
+@login_required
 @csrf_exempt
 def vote_detail(request, vote_id):
     vote = get_object_or_404(Vote, id=vote_id)
