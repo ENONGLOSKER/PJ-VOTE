@@ -17,12 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from vote_app import views
+from django.contrib.auth import views as auth_views
 
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('user/logout/', views.user_logout, name='user_logout'),
+
+
     path('like/<int:vote_id>/', views.like_vote, name='like_vote'),
     path('create/', views.create_vote, name='create_vote'),
     path('add_options/<int:vote_id>/', views.add_options, name='add_options'),

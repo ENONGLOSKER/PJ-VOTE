@@ -1,6 +1,7 @@
 # voting/models.py
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Vote(models.Model):
     title = models.CharField(max_length=200)
@@ -8,6 +9,7 @@ class Vote(models.Model):
     key = models.CharField(max_length=100, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, related_name='liked_votes', blank=True, default=0)
+    deadline = models.DateTimeField(null=True, blank=True)  # Batas waktu opsional
 
     def __str__(self):
         return self.title
@@ -18,7 +20,11 @@ class Vote(models.Model):
     def total_likes(self):
         return self.likes.count()
 
-
+    def is_active(self):
+        """Mengembalikan True jika vote masih aktif atau tidak ada batas waktu."""
+        if self.deadline:
+            return timezone.now() < self.deadline
+        return True
 class Option(models.Model):
     vote = models.ForeignKey(Vote, on_delete=models.CASCADE, related_name='options')
     option_text = models.CharField(max_length=200)

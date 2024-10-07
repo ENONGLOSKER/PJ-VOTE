@@ -5,7 +5,7 @@ from .models import Vote, Option
 class VoteForm(forms.ModelForm):
     class Meta:
         model = Vote
-        fields = ['title', 'description', 'key']
+        fields = ['title', 'description', 'key', 'deadline']
 
 class OptionForm(forms.ModelForm):
     class Meta:

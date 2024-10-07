@@ -185,33 +185,45 @@
             <div class="item-bottom">
               <div class="bottom-user" style="text-align: center;">
                 <h3>{{ vote.description }}</h3>
+                {% if vote.deadline %}
+                <p style="color: white;">Deadline: {{ vote.deadline }}</p>
+                <!-- siswa waktu -->
+                <p id="countdown" style="color: white;"></p>
+                
+                {% else %}
+                <p style="color: white;">No deadline set</p>
+                {% endif %}
+                
+                {% if not is_deadline_passed %}
                 <form method="post">
-                    {% csrf_token %}
-                    {% for option in vote.options.all %}
-                    <div style="text-align: left; color: #7FFA8A; margin-top: 20px; ">
-                        <div class="pilih" style="display: flex; align-items: center; gap: 10px;">
-                            <input type="radio" name="option" value="{{ option.id }}" style="width: 20px; height: 20px;">
-                            {{ option.option_text }} - {{ option.votes }} votes
-                        </div>
-                        <div class="progres" style="display: flex; align-items: center; gap: 10px;">
-                            <progress value="{% widthratio option.votes total_votes 100 %}" max="100" style="margin: 10px 0;"></progress>
-                            <span style="color: white;">
-                                {% if total_votes %}
-                                    {% widthratio option.votes total_votes 100 %}%
-                                {% endif %}
-                            </span>
-                        </div>
-                        
+                  {% csrf_token %}
+                  {% for option in vote.options.all %}
+                  <div style="text-align: left; color: #7FFA8A; margin-top: 20px;">
+                    <div class="pilih" style="display: flex; align-items: center; gap: 10px;">
+                      <input type="radio" name="option" value="{{ option.id }}" style="width: 20px; height: 20px;">
+                      {{ option.option_text }} - {{ option.votes }} votes
                     </div>
-                    {% endfor %}
-                    <button type="submit" class="btn-tap">Vote</button>
+                    <div class="progres" style="display: flex; align-items: center; gap: 10px;">
+                      <progress value="{% widthratio option.votes total_votes 100 %}" max="100" style="margin: 10px 0;"></progress>
+                      <span style="color: white;">
+                        {% if total_votes %}
+                        {% widthratio option.votes total_votes 100 %}%
+                        {% endif %}
+                      </span>
+                    </div>
+                  </div>
+                  {% endfor %}
+                  <button type="submit" class="btn-tap">Vote</button>
                 </form>
+                {% else %}
+                <p style="color: white;">Voting has ended.</p>
+                {% endif %}
               </div>
             </div>
           </div>
           <span style="color: #7FFA8A; background-color: #ffffff27; font-weight: 600; padding: 12px 22px; border-radius: 50px; margin-bottom: 20px;">History</span>
         </div>
-
+      
           <div class="histori">
             {% for record in history %}
             <div class="histori-card">
@@ -237,5 +249,27 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script>
+      function updateCountdown() {
+        var now = new Date().getTime();
+        var deadline = new Date("{{ vote.deadline|date:'Y-m-d H:i:s' }}").getTime();
+        var distance = deadline - now;
+
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("countdown").innerHTML = "Sisa waktu: " + days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+        if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("countdown").innerHTML = "EXPIRED";
+        }
+      }
+
+      var x = setInterval(updateCountdown, 1000);
+      updateCountdown(); // Call once immediately to avoid initial delay
+    </script>
 </body>
 </html>

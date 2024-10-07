@@ -24,6 +24,50 @@
             box-sizing: border-box;
             font-family: "Poppins", sans-serif;
         }
+        /* Pop-up styling */
+        .popup {
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 12px;
+            width: 150px;
+            z-index: 100;
+        }
+
+        /* Initial state: hidden */
+        .hidden {
+            display: none;
+        }
+
+        /* Styling for links inside pop-up */
+        .popup ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .popup ul li {
+            margin: 10px 0;
+        }
+
+        .popup ul li a {
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            width: 100%;
+            display: flex;
+            justify-content: start;
+            gap: 10px;
+            padding-left: 20px;
+        }
+
+        .popup ul li a:hover {
+            text-decoration: none;
+        }
+
+
         body{
           background-color: rgb(1, 17, 36);
         }
@@ -151,7 +195,14 @@
 <body>
     <div class="container">
       <div class="top">
-        <a href="#"><ion-icon name="key-outline" id="icon"></ion-icon></a>
+        <a href="#" id="icon-container"><ion-icon name="key-outline" id="icon"></ion-icon></a>
+        <!-- Pop-up container -->
+        <div id="popup" class="popup hidden">
+          <ul>
+            <li><a href="/sign-in"> <ion-icon name="log-in"></ion-icon> Sign In</a></li>
+            <li><a href="{% url 'user_logout' %}"> <ion-icon name="log-out"></ion-icon>Sign Out</a></li>
+          </ul>
+        </div>
         <p>Vote</p>
         <a href="{% url 'create_vote' %}"><ion-icon name="add-circle" id="icon"></ion-icon></a>
       </div>
@@ -163,7 +214,7 @@
                     <div class="item-top">
                         <div class="top-user">
                             <div class="user">
-                                <img src="{% static 'img/icon.png' %}" alt="" style="width: ;">
+                                <img src="{% static 'img/icon.png' %}" alt="" style="width: 30px; height: 30px;">
                                 <span style="margin-right: 5px; font-weight: 500;">Your Vote</span>
                             </div>
                             <!-- Like -->
@@ -202,5 +253,31 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-</body>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const icon = document.getElementById('icon-container');
+        const popup = document.getElementById('popup');
+
+        // Toggle pop-up visibility on icon click
+        icon.addEventListener('click', function (event) {
+          event.preventDefault(); // Prevent default anchor behavior
+
+          // Position the pop-up next to the icon
+          const rect = icon.getBoundingClientRect();
+          popup.style.top = `${rect.top + window.scrollY + 30}px`; // Adjust as necessary
+          popup.style.left = `${rect.left + window.scrollX}px`; // Adjust as necessary
+
+          popup.classList.toggle('hidden'); // Show/hide pop-up
+        });
+
+        // Hide pop-up if clicking outside
+        document.addEventListener('click', function (event) {
+          if (!icon.contains(event.target) && !popup.contains(event.target)) {
+            popup.classList.add('hidden'); // Hide pop-up if clicked outside
+          }
+        });
+      });
+
+    </script>
+  </body>
 </html>
