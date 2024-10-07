@@ -178,7 +178,52 @@ def user_logout(request):
     logout(request)
     return redirect('vote_list')  # or any other page you want to redirect to after logout
 
+# user register
+from django.contrib.auth.models import User
+from django.contrib.auth import login
+from django.shortcuts import render, redirect
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 
+def user_register(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        image_profile = request.FILES.get('image_profile')
+
+        if User.objects.filter(username=username).exists():
+            return render(request, 'register.html', {'error': 'Username already exists'})
+        
+        if User.objects.filter(email=email).exists():
+            return render(request, 'register.html', {'error': 'Email already exists'})
+
+        user = User.objects.create_user(username=username, email=email, password=password)
+        
+        if image_profile:
+            path = default_storage.save(f'profile_images/{user.id}.jpg', ContentFile(image_profile.read()))
+            user.profile.image = path
+            user.profile.save()
+
+        login(request, user)
+        return redirect('vote_list')  # Redirect to vote list page after successful registration
+
+    return render(request, 'form_register.html')
+
+# user login
+from django.contrib.auth import authenticate, login
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('vote_list')  # Redirect to vote list page after successful login
+        else:
+            return render(request, 'login.html', {'error': 'Invalid username or password'})
+    return render(request, 'form_login.html')
 
 # @login_required
 # def vote_history(request, vote_id):
