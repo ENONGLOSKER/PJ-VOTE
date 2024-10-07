@@ -199,8 +199,12 @@
         <!-- Pop-up container -->
         <div id="popup" class="popup hidden">
           <ul>
-            <li><a href="/sign-in"> <ion-icon name="log-in"></ion-icon> Sign In</a></li>
-            <li><a href="{% url 'user_logout' %}"> <ion-icon name="log-out"></ion-icon>Sign Out</a></li>
+            <li><a href=""> <ion-icon name="build"></ion-icon> My Vote</a></li>
+            <li><a href=""> <ion-icon name="person-add"></ion-icon>Register</a></li>
+            <li><a href=""> <ion-icon name="log-in"></ion-icon> Login</a></li>
+            <li><a href="{% url 'user_logout' %}" style="background-color: #fa1c1c;"> <ion-icon
+                  name="close-circle-outline"></ion-icon>Logout</a>
+            </li>
           </ul>
         </div>
         <p>Vote</p>
