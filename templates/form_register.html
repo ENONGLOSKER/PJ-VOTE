@@ -243,29 +243,30 @@
 
       <form method="post" class="styled-form">
         {% csrf_token %}
-        <div class="">
-          <label for="">Username</label>
-          <input type="text">
+        <div>
+          <label for="username">Username</label>
+          <input type="text" name="username" id="username">
         </div>
-        <div class="">
-          <label for="">Email</label>
-          <input type="email">
+        <div>
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password">
         </div>
-        <div class="">
-          <label for="">Foto Profile</label>
-          <input type="file">
+        <div>
+          <label for="confirm_password">Confirm Password</label>
+          <input type="password" name="confirm_password" id="confirm_password">
         </div>
-        <div class="">
-          <label for="">Password</label>
-          <input type="password">
-        </div>
-
+    
         <button type="submit" class="btn btn-primary" style="border-radius: 50px;">Register</button>
-        <div class="" style="display: flex; justify-content: center; align-items: center; margin-top: 12px;">
-          <span style="text-align: center; color: white;">sudah punya akun? <a href="{% url 'user_login'%}"
-              style="color: #7FFA8A;">Login</a></span>
+    <div style="display: flex; justify-content: center; align-items: center; margin-top: 12px;">
+      <span style="text-align: center; color: white;">
+        sudah punya akun? <a href="{% url 'user_login' %}" style="color: #7FFA8A;">Login</a>
+      </span>
         </div>
-      </form>
+        {% if error %}
+        <p style="color:red; text-align:center;">{{ error }}</p>
+        {% endif %}
+    </form>
+    
 
     </div>
   </div>

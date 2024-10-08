@@ -244,21 +244,22 @@
 
       <form method="post" class="styled-form">
         {% csrf_token %}
-        <div class="">
-          <label for="">Username</label>
-          <input type="text">
+        <div>
+          <label for="username">Username</label>
+          <input type="text" name="username" id="username">
         </div>
-        <div class="">
-          <label for="">Password</label>
-          <input type="password">
+        <div>
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password">
         </div>
-
         <button type="submit" class="btn btn-primary" style="border-radius: 50px;">Login</button>
-        <div class="" style="display: flex; justify-content: center; align-items: center; margin-top: 12px;">
-          <span style="text-align: center; color: white;">belum punya akun? <a href="{% url 'user_register'%}"
-              style="color: #7FFA8A;">Register</a></span>
+        <div style="display: flex; justify-content: center; align-items: center; margin-top: 12px;">
+          <span style="text-align: center; color: white;">belum punya akun?
+            <a href="{% url 'user_register' %}" style="color: #7FFA8A;">Register</a>
+          </span>
         </div>
-      </form>
+    </form>
+    
 
     </div>
   </div>

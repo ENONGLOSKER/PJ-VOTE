@@ -207,7 +207,7 @@
             </li>
           </ul>
         </div>
-        <p>Vote</p>
+        <p>Hei..👋 {% if user.is_authenticated %}{{ user.username }}{% else %}Guest{% endif %}</p>
         <a href="{% url 'create_vote' %}"><ion-icon name="add-circle" id="icon"></ion-icon></a>
       </div>
 
