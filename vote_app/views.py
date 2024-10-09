@@ -15,6 +15,7 @@ from django.contrib.auth import login
 
 # user login
 from django.contrib.auth import authenticate, login
+from django.utils.dateparse import parse_datetime
 
 
 @login_required
@@ -37,12 +38,23 @@ def create_vote(request):
     if request.method == 'POST':
         vote_form = VoteForm(request.POST)
         if vote_form.is_valid():
-            vote = vote_form.save()
+            # Simpan vote tanpa commit
+            vote = vote_form.save(commit=False)
+            
+            # Ambil waktu dari form dan ubah ke timezone-aware
+            deadline_input = request.POST.get('deadline')
+            if deadline_input:
+                # Parsing input menjadi datetime dan mengubahnya menjadi aware
+                deadline = parse_datetime(deadline_input)
+                vote.deadline = timezone.make_aware(deadline, timezone.get_current_timezone())
+
+            vote.save()  # Simpan ke database
+
             return redirect('add_options', vote_id=vote.id)
     else:
         vote_form = VoteForm()
-    return render(request, 'form_vote.html', {'vote_form': vote_form})
 
+    return render(request, 'form_vote.html', {'vote_form': vote_form})
 @login_required
 @csrf_exempt
 def add_options(request, vote_id):
@@ -81,64 +93,11 @@ def vote_detail(request, vote_id):
     vote = get_object_or_404(Vote, id=vote_id)
     history = VoteHistory.objects.filter(vote=vote)
 
-    # Cek apakah user memiliki akses ke vote ini
-    # if not request.session.get(f'vote_{vote.id}_access'):
-    #     return HttpResponseForbidden("Masukkan kunci yang benar untuk mengakses vote ini")
-
+    # Cek total vote
     total_votes = vote.total_votes()
 
-    # Cek apakah batas waktu sudah habis
-    is_deadline_passed = False
-    # if vote.deadline and timezone.now() > vote.deadline:
-    #     is_deadline_passed = True
-    print(is_deadline_passed)
-    if request.method == 'POST' and not is_deadline_passed:  # Cek jika deadline belum habis
-        option_id = request.POST.get('option')
-        option = get_object_or_404(Option, id=option_id)
-
-        # Cek apakah user sudah pernah melakukan vote
-        user_vote_history = VoteHistory.objects.filter(user=request.user, vote=vote).first()
-
-        if user_vote_history:
-            # Jika user memilih opsi yang sama, jangan lakukan apa-apa
-            if user_vote_history.option == option:
-                return redirect('vote_detail', vote_id=vote.id)
-            
-            # Kurangi jumlah vote dari opsi sebelumnya
-            previous_option = user_vote_history.option
-            previous_option.votes -= 1
-            previous_option.save()
-
-            # Update ke opsi baru
-            user_vote_history.option = option
-            user_vote_history.save()
-        else:
-            # Buat vote baru jika belum pernah vote
-            VoteHistory.objects.create(user=request.user, vote=vote, option=option)
-        
-        # Tambahkan vote ke opsi baru
-        option.votes += 1
-        option.save()
-
-        return redirect('vote_detail', vote_id=vote.id)
-
-    return render(request, 'vote_detail.html', {
-        'vote': vote, 
-        'total_votes': total_votes, 
-        'history': history,
-        'is_deadline_passed': is_deadline_passed  # Tambahkan flag untuk template
-    })
-
-@login_required
-@csrf_exempt
-def vote_detail(request, vote_id):
-    vote = get_object_or_404(Vote, id=vote_id)
-    history = VoteHistory.objects.filter(vote=vote)
-
-    # Cek apakah vote sudah melewati deadline
-    is_deadline_passed = vote.deadline and timezone.now() > vote.deadline
-    
-    total_votes = vote.total_votes()
+    local_now = timezone.localtime()
+    print('waktu', local_now)
 
     if request.method == 'POST':
         option_id = request.POST.get('option')
@@ -148,29 +107,30 @@ def vote_detail(request, vote_id):
         user_vote_history = VoteHistory.objects.filter(user=request.user, vote=vote).first()
 
         if user_vote_history:
-            # Jika user memilih opsi yang sama, jangan lakukan apa-apa
             if user_vote_history.option == option:
                 return redirect('vote_detail', vote_id=vote.id)
-            
-            # Kurangi jumlah vote dari opsi sebelumnya
+
             previous_option = user_vote_history.option
             previous_option.votes -= 1
             previous_option.save()
 
-            # Update ke opsi baru
             user_vote_history.option = option
             user_vote_history.save()
         else:
-            # Buat vote baru jika belum pernah vote
             VoteHistory.objects.create(user=request.user, vote=vote, option=option)
-        
-        # Tambahkan vote ke opsi baru
+
         option.votes += 1
         option.save()
 
         return redirect('vote_detail', vote_id=vote.id)
 
-    return render(request, 'vote_detail.html', {'vote': vote, 'total_votes': total_votes, 'history': history, 'is_deadline_passed': is_deadline_passed})
+    return render(request, 'vote_detail.html', {
+        'vote': vote, 
+        'total_votes': total_votes, 
+        'history': history,
+        'local_now': local_now,
+    })
+
 
 @csrf_exempt
 def vote_list(request):

@@ -188,6 +188,7 @@
                 <h3>{{ vote.description }}</h3>
                 {% if vote.deadline %}
                 <p style="color: white;">Deadline: {{ vote.deadline }}</p>
+                <p style="color: white;">localtime: {{ local_now }}</p>
                 <!-- siswa waktu -->
                 <p id="countdown" style="color: white;"></p>
                 
@@ -195,7 +196,7 @@
                 <p style="color: white;">No deadline set</p>
                 {% endif %}
                 
-                {% if not is_deadline_passed %}
+                {% if vote.deadline > local_now %}
                 <form method="post">
                   {% csrf_token %}
                   {% for option in vote.options.all %}
@@ -217,8 +218,9 @@
                   <button type="submit" class="btn-tap">Vote</button>
                 </form>
                 {% else %}
-                <p style="color: white;">Voting has ended.</p>
+                    <p style="color: white;">Voting has ended.</p>
                 {% endif %}
+
               </div>
             </div>
           </div>

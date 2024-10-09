@@ -6,6 +6,13 @@ class VoteForm(forms.ModelForm):
     class Meta:
         model = Vote
         fields = ['title', 'description', 'key', 'deadline']
+        widgets = {
+            'deadline': forms.DateTimeInput(attrs={
+                'type': 'datetime-local',
+                'id': 'id_deadline',
+                'name': 'deadline'
+            })  # Menggunakan input datetime-local dengan id dan name
+        }
 
 class OptionForm(forms.ModelForm):
     class Meta:
