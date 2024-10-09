@@ -220,7 +220,25 @@
                   <button type="submit" class="btn-tap">Vote</button>
                 </form>
                 {% else %}
-                    <p style="color: white; margin-top: 5px;">Voting has ended.</p>
+                <form method="post">
+                  {% csrf_token %}
+                  {% for option in vote.options.all %}
+                  <div style="text-align: left; color: #7FFA8A; margin-top: 20px;">
+                    <div class="pilih" style="display: flex; align-items: center; gap: 10px;">
+                      {{ option.option_text }} - {{ option.votes }} votes
+                    </div>
+                    <div class="progres" style="display: flex; align-items: center; gap: 10px;">
+                      <progress value="{% widthratio option.votes total_votes 100 %}" max="100" style="margin: 10px 0;"></progress>
+                      <span style="color: white;">
+                        {% if total_votes %}
+                        {% widthratio option.votes total_votes 100 %}%
+                        {% endif %}
+                      </span>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </form>
+                <p style="color: white; margin-top: 5px;">Voting Berakhir🎉</p>
                 {% endif %}
 
               </div>
