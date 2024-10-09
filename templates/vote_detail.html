@@ -188,6 +188,7 @@
                 <h3>{{ vote.description }}</h3>
                 {% if vote.deadline %}
                 <p style="color: white;">Deadline: {{ vote.deadline }}</p>
+                <!-- <p style="color: white;">waktu sekarang: {{ local_now }}</p> -->
                 <!-- siswa waktu -->
                 <p id="countdown"
                   style=" margin-top: 10px; color: white; border: 2px solid rgb(203, 5, 5); background-color: rgba(255, 0, 0, 0.233); padding: 5px 10px; border-radius: 50px; font-weight: 600;">
@@ -269,12 +270,18 @@
         if (distance < 0) {
           clearInterval(x);
           document.getElementById("countdown").innerHTML = "WAKTU HABIS";
-          // location.reload();
+
+          // Mengecek apakah halaman sudah di-reload sebelumnya
+          if (!localStorage.getItem('hasReloaded')) {
+            localStorage.setItem('hasReloaded', 'true');  // Menyimpan status reload
+            location.reload(); // Halaman reload hanya sekali
+          }
         }
       }
 
       var x = setInterval(updateCountdown, 1000);
-      updateCountdown(); // Call once immediately to avoid initial delay
+                    updateCountdown(); // Memanggil sekali saat awal
+
     </script>
 </body>
 </html>
