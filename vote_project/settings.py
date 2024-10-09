@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -145,6 +146,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # login redirect
-LOGIN_URL = 'user/login'  # Assuming your login URL name is 'login'
-LOGIN_REDIRECT_URL = '/vote_list'  # Redirect to vote list after successful login
-LOGOUT_REDIRECT_URL = '/vote_list'  # Redirect to login page after logout
+LOGIN_URL = reverse_lazy('user_login')  # Menggunakan url name 'user_login'
+LOGIN_REDIRECT_URL = reverse_lazy('vote_list')  # Redirect ke vote list setelah login
+LOGOUT_REDIRECT_URL = reverse_lazy('vote_list')  # Redirect ke vote list setelah logout
