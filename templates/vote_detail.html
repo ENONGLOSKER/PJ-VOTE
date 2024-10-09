@@ -220,9 +220,7 @@
                   <button type="submit" class="btn-tap">Vote</button>
                 </form>
                 {% else %}
-                <form method="post">
-                  {% csrf_token %}
-                  {% for option in vote.options.all %}
+                {% for option in vote.options.all %}
                   <div style="text-align: left; color: #7FFA8A; margin-top: 20px;">
                     <div class="pilih" style="display: flex; align-items: center; gap: 10px;">
                       {{ option.option_text }} - {{ option.votes }} votes
@@ -237,7 +235,6 @@
                     </div>
                   </div>
                   {% endfor %}
-                </form>
                 <p style="color: white; margin-top: 5px;">Voting Berakhir🎉</p>
                 {% endif %}
 
