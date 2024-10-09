@@ -122,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
  
-TIME_ZONE = 'Asia/Jakarta'  # Mengatur waktu ke WITA (Waktu Indonesia Tengah)
+TIME_ZONE = 'Asia/Makassar'  # Mengatur waktu ke WITA (Waktu Indonesia Tengah)
 
 USE_I18N = True
 
