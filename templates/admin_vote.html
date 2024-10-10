@@ -209,18 +209,22 @@
       <div class="card" onclick="location.href='{% url 'edit_vote' vote.id %}';">
         <div class="item-top">
           <div class="top-user">
-            <span style="color: white;">{{ vote.created }}</span> <!-- Menampilkan waktu pembuatan -->
+            <!-- Menampilkan waktu pembuatan -->
             <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 4px;">
               <a href="{% url 'like_vote' vote.id %}">
                 <ion-icon name="heart" id="icon" style="color: red;"></ion-icon>
               </a>
               <span style="color: white;">{{ vote.total_likes }} likes</span> <!-- Menampilkan jumlah like -->
             </div>
+            <a href="{% url 'delete_vote' vote.id %}" onclick="return confirm('Apakah anda yakin ingin menghapus vote ini?')">
+              <ion-icon name="close-circle" style="color: #7FFA8A; width: 28px; height: 28px;"></ion-icon>
+            </a>
           </div>
         </div>
         <div class="item-bottom">
           <div class="bottom-user">
             <h3 style="text-transform: capitalize; color: #7FFA8A;">{{ vote.title }}</h3>
+            <span style="color: white;">{{ vote.created }}</span>
           </div>
           <a href="" class="btn-tap">Details</a>
         </div>
@@ -239,6 +243,8 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+
 </body>
 
 </html>

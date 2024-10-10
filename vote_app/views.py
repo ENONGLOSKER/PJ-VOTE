@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.utils.dateparse import parse_datetime
 from django.utils import timezone
+from django.contrib import messages
 
 # user auth
 def user_logout(request):
@@ -215,6 +216,15 @@ def edit_vote(request, vote_id):
         vote_form = VoteForm(instance=vote)
 
     return render(request, 'form_vote_edit.html', {'vote_form': vote_form})
+
+@login_required
+def delete_vote(request, vote_id):
+    vote = get_object_or_404(Vote, id=vote_id, created_by=request.user)
+    
+    if request.method == 'GET':
+        vote.delete()
+        messages.success(request, "Vote berhasil dihapus.")
+        return redirect('admin_vote_list')
 
 def admin_vote_option(request):
     votes = Vote.objects.all().order_by('-id')

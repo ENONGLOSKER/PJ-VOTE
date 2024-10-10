@@ -39,6 +39,7 @@ urlpatterns = [
     # admin
     path('vote/admin/', views.admin_vote_list, name='admin_vote_list'),
     path('vote/edit/<int:vote_id>/', views.edit_vote, name='edit_vote'),
+    path('delete-vote/<int:vote_id>/', views.delete_vote, name='delete_vote'),
     path('vote/option/admin/', views.admin_vote_option, name='admin_vote_option'),
 ]
 if settings.DEBUG:
