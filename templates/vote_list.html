@@ -199,13 +199,16 @@
         <!-- Pop-up container -->
         <div id="popup" class="popup hidden">
           <ul>
+            {% if user.is_authenticated %}
             <li><a href="{% url 'admin_vote_list' %}"> <ion-icon name="build"></ion-icon> My Vote</a></li>
             <li><a href="{% url 'user_register'%}"> <ion-icon name="person-add"></ion-icon>Register</a></li>
-            <li><a href="{% url 'user_login'%}"> <ion-icon name="log-in"></ion-icon> Login</a></li>
             <li><a href="{% url 'user_logout' %}" style="background-color: #fa1c1c;"> <ion-icon
-                  name="close-circle-outline"></ion-icon>Logout</a>
-            </li>
-          </ul>
+                  name="close-circle-outline"></ion-icon>Logout</a></li>
+            {% else %}
+            <li><a href="{% url 'user_register'%}"> <ion-icon name="person-add"></ion-icon>Register</a></li>
+            <li><a href="{% url 'user_login'%}"> <ion-icon name="log-in"></ion-icon> Login</a></li>
+            {% endif %}
+            </ul>
         </div>
         <p>Hei..👋 {% if user.is_authenticated %}{{ user.username }}{% else %}Guest{% endif %}</p>
         <a href="{% url 'create_vote' %}"><ion-icon name="add-circle" id="icon"></ion-icon></a>
