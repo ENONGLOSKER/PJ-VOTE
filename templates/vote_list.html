@@ -199,7 +199,7 @@
         <!-- Pop-up container -->
         <div id="popup" class="popup hidden">
           <ul>
-            <li><a href=""> <ion-icon name="build"></ion-icon> My Vote</a></li>
+            <li><a href="{% url 'admin_vote_list' %}"> <ion-icon name="build"></ion-icon> My Vote</a></li>
             <li><a href="{% url 'user_register'%}"> <ion-icon name="person-add"></ion-icon>Register</a></li>
             <li><a href="{% url 'user_login'%}"> <ion-icon name="log-in"></ion-icon> Login</a></li>
             <li><a href="{% url 'user_logout' %}" style="background-color: #fa1c1c;"> <ion-icon

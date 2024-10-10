@@ -24,18 +24,22 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # auth
     path('user/logout/', views.user_logout, name='user_logout'),
     path('user/login/', views.user_login, name='user_login'),
     path('user/register/', views.user_register, name='user_register'),
-
-
-    path('like/<int:vote_id>/', views.like_vote, name='like_vote'),
-    path('create/', views.create_vote, name='create_vote'),
-    path('add_options/<int:vote_id>/', views.add_options, name='add_options'),
-    path('access/<int:vote_id>/', views.access_vote, name='access_vote'),
-    path('vote/<int:vote_id>/', views.vote_detail, name='vote_detail'),
-    path('vote', views.vote_list, name='vote_list'),
+    # user
     path('', views.get_started, name='get_started'),
+    path('vote/', views.vote_list, name='vote_list'),
+    path('vote/add/', views.create_vote, name='create_vote'),
+    path('vote/<int:vote_id>/', views.vote_detail, name='vote_detail'),
+    path('vote/like/<int:vote_id>/', views.like_vote, name='like_vote'),
+    path('vote/access/<int:vote_id>/', views.access_vote, name='access_vote'),
+    path('vote/add_options/<int:vote_id>/', views.add_options, name='add_options'),
+    # admin
+    path('vote/admin/', views.admin_vote_list, name='admin_vote_list'),
+    path('vote/edit/<int:vote_id>/', views.edit_vote, name='edit_vote'),
+    path('vote/option/admin/', views.admin_vote_option, name='admin_vote_option'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,23 +1,72 @@
 # views.py
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseForbidden
+# in
 from .models import Vote, Option, VoteHistory
 from .forms import VoteForm, OptionForm, VoteAccessForm
-from django.contrib.auth.decorators import login_required
+# ex
 from django.views.decorators.csrf import csrf_exempt
-from django.utils import timezone
-from django.contrib.auth import logout
-from django.shortcuts import redirect
-# user register
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
-from django.contrib.auth import login
-
-# user login
-from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 from django.utils.dateparse import parse_datetime
+from django.utils import timezone
 
+# user auth
+def user_logout(request):
+    logout(request)
+    return redirect('vote_list')  # or any other page you want to redirect to after logout
 
+def user_register(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if password == confirm_password:
+            if not User.objects.filter(username=username).exists():
+                user = User.objects.create_user(username=username, password=password)
+                user.save()
+                return redirect('user_login')  # Redirect to login page after successful registration
+            else:
+                error_message = "Username already exists"
+        else:
+            error_message = "Passwords do not match"
+
+        return render(request, 'form_register.html', {'error': error_message})
+
+    return render(request, 'form_register.html')
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            if user.is_superuser:
+                return redirect('/admin/')  # Redirect to Django admin page
+            else:
+                return redirect('vote_list')  # Redirect to vote list page for regular users
+        else:
+            return render(request, 'form_login.html', {'error': 'Invalid username or password'})
+    
+    return render(request, 'form_login.html')
+
+# for user --------------------------------------------------------------------------------------
+
+# fungsi untuk menampilkan halaman awal 
+@csrf_exempt
+def get_started(request):
+    return render(request, 'get_started.html')
+
+# fungsi untuk menampilkan list vote dan menampilkan detail vote
+@csrf_exempt
+def vote_list(request):
+    votes = Vote.objects.all().order_by('-id')
+    return render(request, 'vote_list.html', {'votes': votes})
+
+# Fungsi untuk menyimpan status suka dan tidak suka setiap vote
 @login_required
 @csrf_exempt
 def like_vote(request, vote_id):
@@ -32,14 +81,18 @@ def like_vote(request, vote_id):
 
     return redirect('vote_list')
 
+# fungsi untuk membuat vote baru dan menambahkan option ke dalamnya 
 @login_required
 @csrf_exempt 
 def create_vote(request):
     if request.method == 'POST':
         vote_form = VoteForm(request.POST)
         if vote_form.is_valid():
-            # Simpan vote tanpa commit
+            # Simpan vote tanpa commit dulu agar kita bisa menambahkan user dan deadline
             vote = vote_form.save(commit=False)
+            
+            # Set user yang sedang login sebagai pembuat vote
+            vote.created_by = request.user
             
             # Ambil waktu dari form dan ubah ke timezone-aware
             deadline_input = request.POST.get('deadline')
@@ -48,13 +101,15 @@ def create_vote(request):
                 deadline = parse_datetime(deadline_input)
                 vote.deadline = timezone.make_aware(deadline, timezone.get_current_timezone())
 
-            vote.save()  # Simpan ke database
+            vote.save()  # Simpan vote ke database
 
-            return redirect('add_options', vote_id=vote.id)
+            return redirect('add_options', vote_id=vote.id)  # Redirect ke halaman untuk menambahkan opsi
     else:
         vote_form = VoteForm()
 
     return render(request, 'form_vote.html', {'vote_form': vote_form})
+
+# fungsi untuk menambahkan option ke dalam vote yang ada yang dibuat sebelumnya 
 @login_required
 @csrf_exempt
 def add_options(request, vote_id):
@@ -70,6 +125,8 @@ def add_options(request, vote_id):
     else:
         option_form = OptionForm()
     return render(request, 'form_option.html', {'vote': vote, 'option_form': option_form, 'options': options})
+
+# fungsi untuk mengakses vote dengan kunci yang diberikan oleh user 
 @login_required
 @csrf_exempt
 def access_vote(request, vote_id):
@@ -87,6 +144,7 @@ def access_vote(request, vote_id):
         form = VoteAccessForm()
     return render(request, 'access_vote.html', {'form': form, 'vote': vote})
 
+# fungsi untuk menampilkan detail vote dengan kunci yang diberikan oleh user 
 @login_required
 @csrf_exempt
 def vote_detail(request, vote_id):
@@ -131,63 +189,33 @@ def vote_detail(request, vote_id):
         'local_now': local_now,
     })
 
-
+# for admin --------------------------------------------------------------------------------------
 @csrf_exempt
-def vote_list(request):
+def admin_vote_list(request):
+    user = request.user
+    votes = Vote.objects.filter(created_by=user)  # Filter vote berdasarkan user yang login
+    return render(request, 'admin_vote.html', {'votes': votes})
+
+@login_required
+def edit_vote(request, vote_id):
+    vote = get_object_or_404(Vote, id=vote_id, created_by=request.user)
+    
+    if request.method == 'POST':
+        vote_form = VoteForm(request.POST, instance=vote)
+        if vote_form.is_valid():
+            vote = vote_form.save(commit=False)
+            # Mengubah deadline jika diubah oleh user
+            deadline_input = request.POST.get('deadline')
+            if deadline_input:
+                deadline = parse_datetime(deadline_input)
+                vote.deadline = timezone.make_aware(deadline, timezone.get_current_timezone())
+            vote.save()
+            return redirect('user_vote_list')  # Redirect ke halaman list vote
+    else:
+        vote_form = VoteForm(instance=vote)
+
+    return render(request, 'form_vote.html', {'vote_form': vote_form})
+
+def admin_vote_option(request):
     votes = Vote.objects.all().order_by('-id')
-    return render(request, 'vote_list.html', {'votes': votes})
-
-def get_started(request):
-    return render(request, 'get_started.html')
-
-# user logut
-def user_logout(request):
-    logout(request)
-    return redirect('vote_list')  # or any other page you want to redirect to after logout
-
-def user_register(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
-
-        if password == confirm_password:
-            if not User.objects.filter(username=username).exists():
-                user = User.objects.create_user(username=username, password=password)
-                user.save()
-                return redirect('user_login')  # Redirect to login page after successful registration
-            else:
-                error_message = "Username already exists"
-        else:
-            error_message = "Passwords do not match"
-
-        return render(request, 'form_register.html', {'error': error_message})
-
-    return render(request, 'form_register.html')
-
-def user_login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        
-        if user is not None:
-            login(request, user)
-            if user.is_superuser:
-                return redirect('/admin/')  # Redirect to Django admin page
-            else:
-                return redirect('vote_list')  # Redirect to vote list page for regular users
-        else:
-            return render(request, 'form_login.html', {'error': 'Invalid username or password'})
-    
-    return render(request, 'form_login.html')
-
-# @login_required
-# def vote_history(request, vote_id):
-#     vote = get_object_or_404(Vote, id=vote_id)
-#     history = VoteHistory.objects.filter(vote=vote)
-    
-#     if not request.session.get(f'vote_{vote.id}_access'):
-#         return HttpResponseForbidden("You must enter the correct key to access this vote history.")
-
-#     return render(request, 'vote_history.html', {'vote': vote, 'history': history})
+    return render(request, 'admin_vote_option.html', {'votes': votes})

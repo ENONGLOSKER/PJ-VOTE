@@ -10,6 +10,7 @@ class Vote(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, related_name='liked_votes', blank=True, default=0)
     deadline = models.DateTimeField(null=True, blank=True)  # Batas waktu opsional
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='votes_created')  # Tambahkan field ini
 
     def __str__(self):
         return self.title

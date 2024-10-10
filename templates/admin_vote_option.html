@@ -1,0 +1,245 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="{% static 'img/icon.png' %}">
+  <title>Admin | Vote Option</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --satu: #3B46F1;
+      --dua: #4F58F2;
+      --tiga: #DBD2FA;
+      --empat: #DBD2FA;
+      --lima: #7FFA8A;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    /* Pop-up styling */
+    .popup {
+      position: absolute;
+      background-color: white;
+      border: 1px solid #ccc;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 12px;
+      width: 150px;
+      z-index: 100;
+    }
+
+    /* Initial state: hidden */
+    .hidden {
+      display: none;
+    }
+
+    /* Styling for links inside pop-up */
+    .popup ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .popup ul li {
+      margin: 10px 0;
+    }
+
+    .popup ul li a {
+      color: #000;
+      text-decoration: none;
+      font-weight: bold;
+      width: 100%;
+      display: flex;
+      justify-content: start;
+      gap: 10px;
+      padding-left: 20px;
+    }
+
+    .popup ul li a:hover {
+      text-decoration: none;
+    }
+
+
+    body {
+      background-color: rgb(1, 17, 36);
+    }
+
+    .container {
+      max-width: 500px;
+      height: 100vh;
+      margin: auto;
+      padding: 0 20px;
+
+    }
+
+    .top {
+      padding: 20px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top #icon {
+      width: 25px;
+      height: 25px;
+      color: var(--satu);
+    }
+
+    .top a {
+      background-color: rgba(255, 255, 255, 0.081);
+      width: 45px;
+      height: 45px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 12px;
+    }
+
+    .top a:hover {
+      background-color: var(--dua);
+      color: var(--lima);
+    }
+
+    .top {
+      font-weight: 600;
+      color: var(--tiga);
+    }
+
+    .vote {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .card {
+      background-color: var(--satu);
+      height: 45%;
+      width: 100%;
+      padding: 20px;
+      border-radius: 22px;
+    }
+
+    .item-top .top-user {
+      /* background-color: #DBD2FA; */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .item-top .top-user #icon {
+      width: 25px;
+      height: 25px;
+      color: var(--tiga);
+    }
+
+    .item-top .top-user #icon:hover {
+      color: hotpink;
+    }
+
+    .item-bottom {
+      text-align: center;
+    }
+
+    .bottom-user {
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      text-align: left;
+    }
+
+    .bottom-user h3 {
+      font-size: 26px;
+      color: var(--empat);
+    }
+
+    .bottom-user span {
+      color: #828283;
+    }
+
+    .btn-tap {
+      width: 100%;
+      text-align: center;
+      display: block;
+      padding: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 20px;
+      border-radius: 50px;
+      background-color: var(--lima);
+      color: var(--satu);
+      box-shadow: 2px 2px 30px var(--lima);
+
+    }
+
+    .btn-tap:hover {
+      color: var(--empat);
+      background-color: var(--dua);
+      box-shadow: 2px 2px 30px var(--tiga);
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="top">
+      <a href="{% url 'vote_list' %}"><ion-icon name="chevron-back-outline" id="icon"></ion-icon></a>
+      <p>Edit Vote Option</p>
+      <a href="{% url 'create_vote' %}"><ion-icon name="add-circle" id="icon"></ion-icon></a>
+    </div>
+
+    <div class="vote">
+      <div class="card">
+        <div class="item-top">
+          <div class="top-user">
+            <span style="color: white;">Oct. 9, 2024, 7:44 a.m.</span>
+            <!-- Like -->
+            <div class=""
+              style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 4px;">
+              <a href="">
+                <ion-icon name="heart" id="icon" style="color: red;"></ion-icon>
+              </a>
+              <span style="color: white;">3 likes</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="item-bottom">
+          <div class="bottom-user">
+            <h3 style="text-transform: capitalize; color: #7FFA8A;">PEMILIHAN KETUA</h3>
+
+          </div>
+          <div class=""
+            style="display: flex; flex-direction: column; gap: 15px; justify-content: center; align-items: center;">
+            <a href="" class="btn-tap">Pilihan 01</a>
+            <a href="" class="btn-tap">Pilihan 02</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+</body>
+
+</html>
