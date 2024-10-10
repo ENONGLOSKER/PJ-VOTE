@@ -210,11 +210,11 @@ def edit_vote(request, vote_id):
                 deadline = parse_datetime(deadline_input)
                 vote.deadline = timezone.make_aware(deadline, timezone.get_current_timezone())
             vote.save()
-            return redirect('user_vote_list')  # Redirect ke halaman list vote
+            return redirect('admin_vote_list')  # Redirect ke halaman list vote
     else:
         vote_form = VoteForm(instance=vote)
 
-    return render(request, 'form_vote.html', {'vote_form': vote_form})
+    return render(request, 'form_vote_edit.html', {'vote_form': vote_form})
 
 def admin_vote_option(request):
     votes = Vote.objects.all().order_by('-id')
