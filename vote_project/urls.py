@@ -36,11 +36,15 @@ urlpatterns = [
     path('vote/like/<int:vote_id>/', views.like_vote, name='like_vote'),
     path('vote/access/<int:vote_id>/', views.access_vote, name='access_vote'),
     path('vote/add_options/<int:vote_id>/', views.add_options, name='add_options'),
+    path('vote/<int:vote_id>/add_option/admin/', views.add_option_admin, name='add_option_admin'),
     # admin
     path('vote/admin/', views.admin_vote_list, name='admin_vote_list'),
     path('vote/edit/<int:vote_id>/', views.edit_vote, name='edit_vote'),
     path('delete-vote/<int:vote_id>/', views.delete_vote, name='delete_vote'),
     path('vote/option/admin/', views.admin_vote_option, name='admin_vote_option'),
+    path('vote/<int:vote_id>/options/', views.admin_vote_option, name='admin_vote_option'),
+    path('option/<int:option_id>/edit/', views.edit_option, name='edit_option'),
+    path('option/<int:option_id>/delete/', views.delete_option, name='delete_option'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

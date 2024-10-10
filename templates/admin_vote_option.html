@@ -183,7 +183,7 @@
       border-radius: 50px;
       background-color: var(--lima);
       color: var(--satu);
-      box-shadow: 2px 2px 30px var(--lima);
+      box-shadow: 2px 2px 15px var(--lima);
 
     }
 
@@ -199,9 +199,9 @@
 <body>
   <div class="container">
     <div class="top">
-      <a href="{% url 'vote_list' %}"><ion-icon name="chevron-back-outline" id="icon"></ion-icon></a>
+      <a href="{% url 'admin_vote_list' %}"><ion-icon name="chevron-back-outline" id="icon"></ion-icon></a>
       <p>Edit Vote Option</p>
-      <a href="{% url 'create_vote' %}"><ion-icon name="add-circle" id="icon"></ion-icon></a>
+      <a href="{% url 'add_option_admin' vote.id %}"><ion-icon name="add-circle" id="icon"></ion-icon></a>
     </div>
 
     <div class="vote">
@@ -222,13 +222,17 @@
 
         <div class="item-bottom">
           <div class="bottom-user">
-            <h3 style="text-transform: capitalize; color: #7FFA8A;">PEMILIHAN KETUA</h3>
+            <h3 style="text-transform: capitalize; color: #7FFA8A; text-align: center;">{{ vote.title }}</h3>
 
           </div>
-          <div class=""
-            style="display: flex; flex-direction: column; gap: 15px; justify-content: center; align-items: center;">
-            <a href="" class="btn-tap">Pilihan 01</a>
-            <a href="" class="btn-tap">Pilihan 02</a>
+          <div class="" style="display: flex; flex-direction: column; gap: 15px; justify-content: center; align-items: center;">
+            {% for option in options %}
+            <div class=""
+              style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 100%; gap: 15px;">
+              <a href="{% url 'edit_option' option.id %}" class=" btn-tap">{{ option.option_text }} - {{ option.votes }} vote</a>
+              <a href="{% url 'delete_option' option.id %}" onclick="return confirm('Are you sure you want to delete this option?');" style="width: 48px; height: 40px; background-color: #4F58F2; border-radius: 50px; display: flex; justify-content: center; align-items: center;"><ion-icon name="close-circle" style="color: #ef1414; width: 30px; height: 30px;"></ion-icon></a>
+            </div>
+            {% endfor %}
           </div>
         </div>
       </div>

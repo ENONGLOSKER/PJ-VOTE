@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="{% static 'img/icon.png' %}">
-  <title>Admin | Vote</title>
+  <title>Add Vote Option</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -28,50 +28,6 @@
       box-sizing: border-box;
       font-family: "Poppins", sans-serif;
     }
-
-    /* Pop-up styling */
-    .popup {
-      position: absolute;
-      background-color: white;
-      border: 1px solid #ccc;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      padding: 10px;
-      border-radius: 12px;
-      width: 150px;
-      z-index: 100;
-    }
-
-    /* Initial state: hidden */
-    .hidden {
-      display: none;
-    }
-
-    /* Styling for links inside pop-up */
-    .popup ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .popup ul li {
-      margin: 10px 0;
-    }
-
-    .popup ul li a {
-      color: #000;
-      text-decoration: none;
-      font-weight: bold;
-      width: 100%;
-      display: flex;
-      justify-content: start;
-      gap: 10px;
-      padding-left: 20px;
-    }
-
-    .popup ul li a:hover {
-      text-decoration: none;
-    }
-
 
     body {
       background-color: rgb(1, 17, 36);
@@ -129,7 +85,6 @@
     .card {
       background-color: var(--satu);
       height: 45%;
-      width: 100%;
       padding: 20px;
       border-radius: 22px;
     }
@@ -149,6 +104,27 @@
 
     .item-top .top-user #icon:hover {
       color: hotpink;
+    }
+
+    .item-top .top-user .user {
+      background-color: var(--lima);
+      padding: 6px 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      border-radius: 50px;
+    }
+
+    .item-top .top-user .user:hover {
+      box-shadow: 4px 2px 50px var(--lima);
+    }
+
+    .item-top .top-user .user img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid var(--empat);
     }
 
     .item-bottom {
@@ -173,24 +149,87 @@
     }
 
     .btn-tap {
+      background-color: var(--dua);
       width: 100%;
       text-align: center;
       display: block;
       padding: 12px;
       text-decoration: none;
+      color: var(--empat);
       font-weight: 600;
-      font-size: 20px;
       border-radius: 50px;
-      background-color: var(--lima);
-      color: var(--satu);
-      box-shadow: 2px 2px 30px var(--lima);
-
+      box-shadow: 2px 2px 30px #3340f9;
     }
 
     .btn-tap:hover {
-      color: var(--empat);
-      background-color: var(--dua);
-      box-shadow: 2px 2px 30px var(--tiga);
+      background-color: var(--lima);
+      color: var(--satu);
+      box-shadow: 2px 2px 30px var(--lima);
+    }
+
+
+    /* form */
+    /* form{
+          background-color: #ffffff33;
+          width: 100%;
+          color: white;
+          padding: 50px 20px;
+          border-radius: 22px;
+        } */
+    .styled-form {
+      background-color: #ffffff33;
+      padding: 20px;
+      margin: 14px 0;
+      border-radius: 12px;
+      width: 100%;
+    }
+
+    .styled-form p {
+      margin: 0 0 8px;
+    }
+
+    .styled-form label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: white;
+    }
+
+    .styled-form input[type="text"],
+    .styled-form input[type="text"],
+    .styled-form input[type="text"],
+    .styled-form select,
+    .styled-form textarea {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .styled-form textarea {
+      height: 100px;
+    }
+
+    .styled-form button.btn {
+      display: inline-block;
+      width: 100%;
+      background: var(--satu);
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .styled-form button.btn:hover {
+      background: var(--lima);
+      color: var(--satu);
     }
   </style>
 
@@ -200,51 +239,24 @@
   <div class="container">
     <div class="top">
       <a href="{% url 'vote_list' %}"><ion-icon name="chevron-back-outline" id="icon"></ion-icon></a>
-      <p style="text-transform: capitalize;">Edit Vote - {{ request.user.username }}</p>
+      <p>Add Vote Option</p>
       <a href="{% url 'create_vote' %}"><ion-icon name="add-circle" id="icon"></ion-icon></a>
     </div>
 
     <div class="vote">
-      {% for vote in votes %}
-      <div class="card" onclick="location.href='{% url 'edit_vote' vote.id %}'">
-        <div class="item-top">
-          <div class="top-user">
-            <!-- Menampilkan waktu pembuatan -->
-            <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 4px;">
-              <a href="{% url 'like_vote' vote.id %}">
-                <ion-icon name="heart" id="icon" style="color: red;"></ion-icon>
-              </a>
-              <span style="color: white;">{{ vote.total_likes }} likes</span> <!-- Menampilkan jumlah like -->
-            </div>
-            <a href="{% url 'delete_vote' vote.id %}" onclick="return confirm('Apakah anda yakin ingin menghapus vote ini?')">
-              <ion-icon name="close-circle" style="color: #7FFA8A; width: 28px; height: 28px;"></ion-icon>
-            </a>
-          </div>
-        </div>
-        <div class="item-bottom">
-          <div class="bottom-user">
-            <h3 style="text-transform: capitalize; color: #7FFA8A;">{{ vote.title }}</h3>
-            <span style="color: white;">{{ vote.created }}</span>
-          </div>
-          <a href="{% url 'admin_vote_option' vote.id %}" class="btn-tap">Details</a>
-        </div>
-      </div>
-      {% empty %}
-      <div
-        style="margin: 50px auto; background-color: #4f57f24b; padding: 20px; border-radius: 22px; text-align: center;">
-        <span style="font-size: 100px;">😥</span>
-        <p style="font-size: 20px; color: white;">Data vote belum ada!</p>
-      </div>
-      {% endfor %}
-    </div>
 
+      <form method="post" class="styled-form">
+        {% csrf_token %}
+        {{ option_form.as_p }}
+        <button type="submit" class="btn">Edit Option</button>
+      </form>
+
+    </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
-
 </body>
 
 </html>

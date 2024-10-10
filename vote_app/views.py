@@ -226,6 +226,41 @@ def delete_vote(request, vote_id):
         messages.success(request, "Vote berhasil dihapus.")
         return redirect('admin_vote_list')
 
-def admin_vote_option(request):
-    votes = Vote.objects.all().order_by('-id')
-    return render(request, 'admin_vote_option.html', {'votes': votes})
+def admin_vote_option(request, vote_id):
+    vote = get_object_or_404(Vote, id=vote_id)
+    options = Option.objects.filter(vote=vote)
+    return render(request, 'admin_vote_option.html', {'vote': vote, 'options': options})
+
+def edit_option(request, option_id):
+    option = get_object_or_404(Option, id=option_id)
+    
+    if request.method == 'POST':
+        option_form = OptionForm(request.POST, instance=option)
+        if option_form.is_valid():
+            option_form.save()
+            return redirect('admin_vote_option', vote_id=option.vote.id)
+    else:
+        option_form = OptionForm(instance=option)
+    
+    return render(request, 'form_option_edit.html', {'option_form': option_form, 'option': option})
+
+def delete_option(request, option_id):
+    option = get_object_or_404(Option, id=option_id)
+    vote_id = option.vote.id  # Simpan ID vote agar bisa kembali ke halaman yang tepat
+    option.delete()
+    return redirect('admin_vote_option', vote_id=vote_id)
+
+def add_option_admin(request, vote_id):
+    vote = get_object_or_404(Vote, id=vote_id)
+    
+    if request.method == 'POST':
+        option_form = OptionForm(request.POST)
+        if option_form.is_valid():
+            new_option = option_form.save(commit=False)
+            new_option.vote = vote  # Hubungkan option baru dengan vote
+            new_option.save()
+            return redirect('admin_vote_option', vote_id=vote.id)
+    else:
+        option_form = OptionForm()
+
+    return render(request, 'form_option.html', {'option_form': option_form, 'vote': vote})
